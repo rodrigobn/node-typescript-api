@@ -5,8 +5,8 @@ import stormGlassNormalized3hoursFixture from '@test/fixtures/stormGlass_normali
 jest.mock('axios');
 
 describe('StormGlass client', () => {
-  const mockedAxios = axios as jest.Mocked<typeof axios>
-    it('deve retornar a previsão normalizada do serviço Stormglass', async () => {
+  const mockedAxios = axios as jest.Mocked<typeof axios>;
+  it('deve retornar a previsão normalizada do serviço Stormglass', async () => {
     const lat = -33.792726;
     const lng = 151.289824;
 
@@ -36,14 +36,13 @@ describe('StormGlass client', () => {
     const stormGlass = new StormGlass(mockedAxios);
     const response = await stormGlass.fetchPoints(lat, lng);
 
-    expect(response).toEqual([])
+    expect(response).toEqual([]);
   });
-
 
   it('deve obter um erro genérico do serviço StormGlass quando a solicitação falha antes de chegar ao serviço', async () => {
     const lat = -33.792726;
     const lng = 151.289824;
-    
+
     mockedAxios.get.mockRejectedValue({ message: 'Network Error' });
 
     const stormGlass = new StormGlass(mockedAxios);
@@ -60,7 +59,7 @@ describe('StormGlass client', () => {
     mockedAxios.get.mockRejectedValue({
       response: {
         status: 429,
-        data: { errors: ['Rate Limit reached' ] },
+        data: { errors: ['Rate Limit reached'] },
       },
     });
 
@@ -68,6 +67,6 @@ describe('StormGlass client', () => {
 
     await expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow(
       `Unexpected error returned by the StormGlass service: Error: {"errors":["Rate Limit reached"]} Code: 429`
-    )
-  })
+    );
+  });
 });
