@@ -23,10 +23,10 @@ export interface TimeForecast {
   forecast: BeachForecast[];
 }
 
-export class ForecastProcessingInternalError extends InternalError{
-    constructor(message: string){
-        super(`Unexpected error during the forecast processing: ${message}`);
-    }
+export class ForecastProcessingInternalError extends InternalError {
+  constructor(message: string) {
+    super(`Unexpected error during the forecast processing: ${message}`);
+  }
 }
 
 export class Forecast {
@@ -39,33 +39,35 @@ export class Forecast {
     try {
       for (const beach of beaches) {
         const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-        const enrichedBeachData = this.enrichedBeachData(points, beach)
+        const enrichedBeachData = this.enrichedBeachData(points, beach);
         pointsWithCorrectSources.push(...enrichedBeachData);
       }
       return this.mapForecastByTime(pointsWithCorrectSources);
     } catch (error) {
-        throw new ForecastProcessingInternalError(error.menssage)
-        
+      throw new ForecastProcessingInternalError(error.menssage);
     }
   }
 
   /**
    * Pegando os dados do stormglass e fazendo merge com os dados da praia
-   * @param points 
-   * @param beach 
-   * @returns 
+   * @param points
+   * @param beach
+   * @returns
    */
-  private enrichedBeachData(points: ForecastPoint[], beach: Beach): BeachForecast[]{
-      return points.map((e) => ({
-        ...{
-          lat: beach.lat,
-          lng: beach.lng,
-          name: beach.name,
-          position: beach.position,
-          rating: 1,
-        },
-        ...e,
-      }));
+  private enrichedBeachData(
+    points: ForecastPoint[],
+    beach: Beach
+  ): BeachForecast[] {
+    return points.map((e) => ({
+      ...{
+        lat: beach.lat,
+        lng: beach.lng,
+        name: beach.name,
+        position: beach.position,
+        rating: 1,
+      },
+      ...e,
+    }));
   }
 
   private mapForecastByTime(forecast: BeachForecast[]): TimeForecast[] {

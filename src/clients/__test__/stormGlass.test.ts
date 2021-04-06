@@ -5,15 +5,18 @@ import stormGlassNormalized3hoursFixture from '@test/fixtures/stormGlass_normali
 jest.mock('@src/util/request');
 
 describe('StormGlass client', () => {
-  
-  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<typeof HTTPUtil.Request>
-  
+  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
+    typeof HTTPUtil.Request
+  >;
+
   const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
   it('deve retornar a previsão normalizada do serviço Stormglass', async () => {
     const lat = -33.792726;
     const lng = 151.289824;
 
-    mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3hoursFixture } as HTTPUtil.Response);
+    mockedRequest.get.mockResolvedValue({
+      data: stormGlassWeather3hoursFixture,
+    } as HTTPUtil.Response);
 
     const stormGlass = new StormGlass(mockedRequest);
     const reponse = await stormGlass.fetchPoints(lat, lng);
@@ -34,7 +37,9 @@ describe('StormGlass client', () => {
         },
       ],
     };
-    mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as HTTPUtil.Response);
+    mockedRequest.get.mockResolvedValue({
+      data: incompleteResponse,
+    } as HTTPUtil.Response);
 
     const stormGlass = new StormGlass(mockedRequest);
     const response = await stormGlass.fetchPoints(lat, lng);
